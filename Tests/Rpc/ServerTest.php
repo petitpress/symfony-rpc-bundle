@@ -10,9 +10,12 @@
 
 namespace Seven\RpcBundle\Tests\Rpc;
 
-use PHPUnit\Framework\TestCase;;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
 use Seven\RpcBundle\Rpc\Server;
+use Seven\RpcBundle\Tests\Rpc\Asserts\CallbackHandler;
 
+#[AllowMockObjectsWithoutExpectations]
 class ServerTest extends TestCase
 {
     public function testRequestHandle()
@@ -20,31 +23,31 @@ class ServerTest extends TestCase
         $httpRequestMock = $this->createMock("Symfony\\Component\\HttpFoundation\\Request");
         $httpResponseMock = $this->createMock("Symfony\\Component\\HttpFoundation\\Response");
         $implementationMock = $this->createMock("Seven\\RpcBundle\\Rpc\\Implementation");
-        $methodCallMock = $this->createMock("Seven\\RpcBundle\\Rpc\\Method\\MethodCall", array(), array(), '', false);
-        $handlerMock = $this->getMockBuilder("stdClass")->setMethods(array('op'))->getMock();
+        $methodCallMock = $this->createMock("Seven\\RpcBundle\\Rpc\\Method\\MethodCall");
+        $handlerMock = $this->getMockBuilder(CallbackHandler::class)->onlyMethods(array('op'))->getMock();
 
         $handlerMock->expects($this->once())
             ->method('op')
             ->with($this->equalTo('parameter_1'), $this->equalTo('parameter_2'))
-            ->will($this->returnValue('return_value'));
+            ->willReturn('return_value');
 
         $methodCallMock->expects($this->any())
             ->method('getMethodName')
-            ->will($this->returnValue('method.op'));
+            ->willReturn('method.op');
 
         $methodCallMock->expects($this->any())
             ->method('getParameters')
-            ->will($this->returnValue(array('parameter_1', 'parameter_2')));
+            ->willReturn(array('parameter_1', 'parameter_2'));
 
         $implementationMock->expects($this->once())
             ->method('createMethodCall')
             ->with($this->equalTo($httpRequestMock))
-            ->will($this->returnValue($methodCallMock));
+            ->willReturn($methodCallMock);
 
         $implementationMock->expects($this->once())
             ->method('createHttpResponse')
             ->with($this->isInstanceOf("Seven\\RpcBundle\\Rpc\\Method\\MethodReturn"))
-            ->will($this->returnValue($httpResponseMock));
+            ->willReturn($httpResponseMock);
 
         $server = new Server($implementationMock);
         $server->addHandler('method', $handlerMock);
@@ -59,33 +62,33 @@ class ServerTest extends TestCase
         $httpRequestMock = $this->createMock("Symfony\\Component\\HttpFoundation\\Request");
         $httpResponseMock = $this->createMock("Symfony\\Component\\HttpFoundation\\Response");
         $implementationMock = $this->createMock("Seven\\RpcBundle\\Rpc\\Implementation");
-        $methodCallMock = $this->createMock("Seven\\RpcBundle\\Rpc\\Method\\MethodCall", array(), array(), '', false);
-        $handlerMock = $this->getMockBuilder("stdClass")->setMethods(array('op'))->getMock();
+        $methodCallMock = $this->createMock("Seven\\RpcBundle\\Rpc\\Method\\MethodCall");
+        $handlerMock = $this->getMockBuilder(CallbackHandler::class)->onlyMethods(array('op'))->getMock();
 
         $handlerMock->expects($this->once())
             ->method('op')
             ->with($this->equalTo('parameter_1'), $this->equalTo('parameter_2'))
-            ->will($this->returnCallback(function () {
+            ->willReturnCallback(function () {
                 throw new \Exception('Test', 10);
-            }));
+            });
 
         $methodCallMock->expects($this->any())
             ->method('getMethodName')
-            ->will($this->returnValue('method.op'));
+            ->willReturn('method.op');
 
         $methodCallMock->expects($this->any())
             ->method('getParameters')
-            ->will($this->returnValue(array('parameter_1', 'parameter_2')));
+            ->willReturn(array('parameter_1', 'parameter_2'));
 
         $implementationMock->expects($this->once())
             ->method('createMethodCall')
             ->with($this->equalTo($httpRequestMock))
-            ->will($this->returnValue($methodCallMock));
+            ->willReturn($methodCallMock);
 
         $implementationMock->expects($this->once())
             ->method('createHttpResponse')
             ->with($this->isInstanceOf("Seven\\RpcBundle\\Rpc\\Method\\MethodFault"))
-            ->will($this->returnValue($httpResponseMock));
+            ->willReturn($httpResponseMock);
 
         $server = new Server($implementationMock);
         $server->addHandler('method', $handlerMock);
@@ -98,12 +101,12 @@ class ServerTest extends TestCase
     public function testServerCallWithCallback()
     {
         $implementationMock = $this->createMock("Seven\\RpcBundle\\Rpc\\Implementation");
-        $callbackMock = $this->getMockBuilder("stdClass")->setMethods(array('callbackMethod'))->getMock();
+        $callbackMock = $this->getMockBuilder(CallbackHandler::class)->onlyMethods(array('callbackMethod'))->getMock();
 
         $callbackMock->expects($this->once())
             ->method('callbackMethod')
             ->with($this->equalTo("parameter_1"), $this->equalTo("parameter_2"))
-            ->will($this->returnValue("result_value"));
+            ->willReturn("result_value");
 
         $server = new Server($implementationMock);
         $server->addHandler('rpcMethodName', array($callbackMock, 'callbackMethod'));

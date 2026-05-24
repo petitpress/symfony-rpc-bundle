@@ -88,7 +88,7 @@ class TransportCurl implements TransportInterface
             CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_CUSTOMREQUEST => "POST",
             CURLOPT_HTTPHEADER => array(
-                'Content-Type: ' . $request->getContentType(),
+                'Content-Type: ' . $request->getContentTypeFormat(),
                 'Content-Length: ' . strlen($request->getContent())
             )
         );

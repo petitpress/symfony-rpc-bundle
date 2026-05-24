@@ -10,9 +10,11 @@
  */
 
 namespace Seven\RpcBundle\Tests\XmlRpc\ValueType;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Seven\RpcBundle\XmlRpc\ValueType\ArrayType;
 
+#[AllowMockObjectsWithoutExpectations]
 class ArrayTypeTest extends TestCase
 {
 
@@ -21,11 +23,11 @@ class ArrayTypeTest extends TestCase
         $implementationMock = $this->createMock("Seven\\RpcBundle\\XmlRpc\\Implementation");
         $implementationMock->expects($this->any())
             ->method('pack')
-            ->will($this->returnCallback(function ($document) {
+            ->willReturnCallback(function ($document) {
                 /** @var $document \DOMDocument */
 
                 return $document->createElement('test', 'test');
-            }));
+            });
 
         $typeInstance = new ArrayType($implementationMock);
         $domElement = $typeInstance->pack(new \DOMDocument(), array('value'));
@@ -47,13 +49,13 @@ class ArrayTypeTest extends TestCase
 
         $implementationMock->expects($this->any())
             ->method('extract')
-            ->will($this->returnCallback(function (\DOMElement $element) {
+            ->willReturnCallback(function (\DOMElement $element) {
                 if ($element->tagName == 'test') {
                     return $element->nodeValue;
                 }
 
                 return null;
-            }));
+            });
 
         $document = new \DOMDocument();
         $document->appendChild($arrayEl = $document->createElement('array'));

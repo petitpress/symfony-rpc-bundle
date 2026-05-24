@@ -10,9 +10,11 @@
  */
 
 namespace Seven\RpcBundle\Tests\XmlRpc\ValueType;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Seven\RpcBundle\XmlRpc\ValueType\StringType;
 
+#[AllowMockObjectsWithoutExpectations]
 class StringTypeTest extends TestCase
 {
     public function testPacking()

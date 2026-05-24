@@ -20,7 +20,7 @@ class ImplementationTypeDetectTest extends TestCase
     /** @var Implementation */
     public $impl;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->impl = new Implementation();
     }

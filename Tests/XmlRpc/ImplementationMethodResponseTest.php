@@ -9,12 +9,14 @@
  */
 
 namespace Seven\RpcBundle\Tests\XmlRpc;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Seven\RpcBundle\Rpc\Method\MethodFault;
 use Seven\RpcBundle\Rpc\Method\MethodReturn;
 use Seven\RpcBundle\XmlRpc\Implementation;
 use Seven\RpcBundle\Tests\XmlRpc\Asserts\MethodUnknownResponse;
 
+#[AllowMockObjectsWithoutExpectations]
 class ImplementationMethodResponseTest extends TestCase
 {
     public function testPackingValueResponse()
@@ -55,7 +57,7 @@ class ImplementationMethodResponseTest extends TestCase
         $httpResponse = $this->createMock("Symfony\\Component\\HttpFoundation\\Response");
         $httpResponse->expects($this->once())
             ->method('getContent')
-            ->will($this->returnValue("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<methodResponse><params><param><value><string>test</string></value></param></params></methodResponse>\n"));
+            ->willReturn("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<methodResponse><params><param><value><string>test</string></value></param></params></methodResponse>\n");
 
         $methodResponse = $impl->createMethodResponse($httpResponse);
 
@@ -70,7 +72,7 @@ class ImplementationMethodResponseTest extends TestCase
         $httpResponse = $this->createMock("Symfony\\Component\\HttpFoundation\\Response");
         $httpResponse->expects($this->once())
             ->method('getContent')
-            ->will($this->returnValue("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<methodResponse><fault><value><struct><member><name>faultCode</name><value><int>4</int></value></member><member><name>faultString</name><value><string>Too many parameters.</string></value></member></struct></value></fault></methodResponse>\n"));
+            ->willReturn("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<methodResponse><fault><value><struct><member><name>faultCode</name><value><int>4</int></value></member><member><name>faultString</name><value><string>Too many parameters.</string></value></member></struct></value></fault></methodResponse>\n");
 
         $methodResponse = $impl->createMethodResponse($httpResponse);
 
@@ -87,7 +89,7 @@ class ImplementationMethodResponseTest extends TestCase
         $httpResponse = $this->createMock("Symfony\\Component\\HttpFoundation\\Response");
         $httpResponse->expects($this->once())
             ->method('getContent')
-            ->will($this->returnValue(""));
+            ->willReturn("");
 
         $impl->createMethodResponse($httpResponse);
     }
@@ -101,7 +103,7 @@ class ImplementationMethodResponseTest extends TestCase
         $httpResponse = $this->createMock("Symfony\\Component\\HttpFoundation\\Response");
         $httpResponse->expects($this->once())
             ->method('getContent')
-            ->will($this->returnValue("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<methodCall><fault /></methodCall>\n"));
+            ->willReturn("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<methodCall><fault /></methodCall>\n");
 
         $impl->createMethodResponse($httpResponse);
     }
@@ -140,7 +142,7 @@ class ImplementationMethodResponseTest extends TestCase
         $httpResponse = $this->createMock("Symfony\\Component\\HttpFoundation\\Response");
         $httpResponse->expects($this->once())
             ->method('getContent')
-            ->will($this->returnValue($responseXml));
+            ->willReturn($responseXml);
 
         $methodResponse = $impl->createMethodResponse($httpResponse);
 

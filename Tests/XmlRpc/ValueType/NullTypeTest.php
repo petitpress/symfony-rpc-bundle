@@ -9,9 +9,11 @@
  */
 
 namespace Seven\RpcBundle\Tests\XmlRpc\ValueType;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Seven\RpcBundle\XmlRpc\ValueType\NullType;
 
+#[AllowMockObjectsWithoutExpectations]
 class NullTypeTest extends TestCase
 {
     public function testPacking()

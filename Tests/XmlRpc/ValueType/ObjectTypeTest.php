@@ -10,9 +10,11 @@
  */
 
 namespace Seven\RpcBundle\Tests\XmlRpc\ValueType;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Seven\RpcBundle\XmlRpc\ValueType\ObjectType;
 
+#[AllowMockObjectsWithoutExpectations]
 class ObjectTypeTest extends TestCase
 {
     public function testPacking()
@@ -38,9 +40,9 @@ class ObjectTypeTest extends TestCase
         $valueFactoryMock = $this->createMock("Seven\\RpcBundle\\XmlRpc\\Implementation");
         $valueFactoryMock->expects($this->any())
             ->method('pack')
-            ->will($this->returnCallback(function ($document, $value) {
+            ->willReturnCallback(function ($document, $value) {
                 return $document->createElement('value', $value);
-            }));
+            });
 
         return $valueFactoryMock;
     }
@@ -68,12 +70,12 @@ class ObjectTypeTest extends TestCase
 
         $implementationMock->expects($this->any())
             ->method('extract')
-            ->will($this->returnCallback(function (\DOMElement $element) {
+            ->willReturnCallback(function (\DOMElement $element) {
                 if($element->tagName == 'test')
 
                     return $element->nodeValue;
                 return null;
-            }));
+            });
 
         $document = new \DOMDocument();
         $document->appendChild($structEl = $document->createElement('struct'));

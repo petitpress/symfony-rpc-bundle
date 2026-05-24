@@ -9,16 +9,16 @@
  */
 
 namespace Seven\RpcBundle\Tests\JsonRpc;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Seven\RpcBundle\Rpc\Method\MethodCall;
 use Seven\RpcBundle\JsonRpc\Implementation;
 
+#[AllowMockObjectsWithoutExpectations]
 class ImplementationMethodCallTest extends TestCase
 {
-    /**
-     * @dataProvider providerRpcCallWithParameters
-     */
-
+    #[DataProvider('providerRpcCallWithParameters')]
     public function testRpcCallWithParameters($methodName, $methodParams, $methodId)
     {
         $requestJson = json_encode(array(
@@ -33,7 +33,7 @@ class ImplementationMethodCallTest extends TestCase
 
         $requestMock->expects($this->once())
             ->method("getContent")
-            ->will($this->returnValue($requestJson));
+            ->willReturn($requestJson);
 
         $methodCall = $impl->createMethodCall($requestMock);
 
@@ -42,7 +42,7 @@ class ImplementationMethodCallTest extends TestCase
         $this->assertEquals($methodParams, $methodCall->getParameters());
     }
 
-    public function providerRpcCallWithParameters()
+    public static function providerRpcCallWithParameters(): array
     {
         return array(
             array('methodname', array(1, 2, 3), 1),             // positional parameters
@@ -59,7 +59,7 @@ class ImplementationMethodCallTest extends TestCase
         $requestMock = $this->createMock("Symfony\\Component\\HttpFoundation\\Request");
         $requestMock->expects($this->once())
             ->method("getContent")
-            ->will($this->returnValue(""));
+            ->willReturn("");
 
         $impl->createMethodCall($requestMock);
     }
@@ -77,15 +77,12 @@ class ImplementationMethodCallTest extends TestCase
         $requestMock = $this->createMock("Symfony\\Component\\HttpFoundation\\Request");
         $requestMock->expects($this->once())
             ->method("getContent")
-            ->will($this->returnValue($requestJson));
+            ->willReturn($requestJson);
 
         $impl->createMethodCall($requestMock);
     }
 
-    /**
-     * @dataProvider providerPackingCall
-     */
-
+    #[DataProvider('providerPackingCall')]
     public function testPackingCall($methodName, $methodParams, $methodCallId, $rawRequestData)
     {
         $impl = new Implementation();
@@ -96,7 +93,7 @@ class ImplementationMethodCallTest extends TestCase
         $this->assertEquals("application/json", $httpRequest->headers->get('Content-Type'));
     }
 
-    public function providerPackingCall()
+    public static function providerPackingCall(): array
     {
         return array(
             array("subtract", array(42, 23), 1, '{"jsonrpc":"2.0","method":"subtract","params":[42,23],"id":1}'),

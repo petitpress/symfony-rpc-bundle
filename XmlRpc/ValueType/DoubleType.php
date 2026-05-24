@@ -21,7 +21,7 @@ class DoubleType extends AbstractType
 
     public function pack(\DOMDocument $document, $value)
     {
-        return $this->wrap($document->createElement("double", (double) $value), "value");
+        return $this->wrap($document->createElement("double", (float) $value), "value");
     }
 
     /**
@@ -31,7 +31,7 @@ class DoubleType extends AbstractType
 
     public function extract(\DOMElement $element)
     {
-        return (double) $element->nodeValue;
+        return (float) $element->nodeValue;
     }
 
 }

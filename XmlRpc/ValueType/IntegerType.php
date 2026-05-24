@@ -21,7 +21,7 @@ class IntegerType extends AbstractType
 
     public function pack(\DOMDocument $document, $value)
     {
-        return $this->wrap($document->createElement("int", (double) $value), "value");
+        return $this->wrap($document->createElement("int", (int) $value), "value");
     }
 
     /**

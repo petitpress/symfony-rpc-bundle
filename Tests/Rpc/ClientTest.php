@@ -10,10 +10,12 @@
 
 namespace Seven\RpcBundle\Tests\Rpc;
 
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Seven\RpcBundle\Rpc\Client;
 use Seven\RpcBundle\Rpc\Method\MethodCall;
 
+#[AllowMockObjectsWithoutExpectations]
 class ClientTest extends TestCase
 {
 
@@ -33,20 +35,20 @@ class ClientTest extends TestCase
                 return $methodCall->getMethodName() == "method.name" &&
                     $methodCall->getParameters() == array('param_1', 'param_2');
             }))
-            ->will($this->returnValue($httpRequestMock));
+            ->willReturn($httpRequestMock);
 
         $transportMock->expects($this->once())
             ->method("makeRequest")
-            ->will($this->returnValue($httpResponseMock));
+            ->willReturn($httpResponseMock);
 
         $implMock->expects($this->once())
             ->method("createMethodResponse")
             ->with($this->equalTo($httpResponseMock))
-            ->will($this->returnValue($methodReturnMock));
+            ->willReturn($methodReturnMock);
 
         $methodReturnMock->expects($this->once())
             ->method("getReturnValue")
-            ->will($this->returnValue("return_value"));
+            ->willReturn("return_value");
 
         $this->assertEquals('return_value', $client->call("method.name", array('param_1', 'param_2')));
     }

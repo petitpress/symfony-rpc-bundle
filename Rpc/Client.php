@@ -33,7 +33,7 @@ class Client implements ClientInterface
      * @param TransportInterface $transport
      */
 
-    public function __construct($webServiceUrl, Implementation $impl, TransportInterface $transport = null)
+    public function __construct($webServiceUrl, Implementation $impl, ?TransportInterface $transport = null)
     {
         $this->impl = $impl;
         $this->webServiceUrl = $webServiceUrl;

@@ -10,9 +10,11 @@
  */
 
 namespace Seven\RpcBundle\Tests\XmlRpc\ValueType;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Seven\RpcBundle\XmlRpc\ValueType\BooleanType;
 
+#[AllowMockObjectsWithoutExpectations]
 class BooleanTypeTest extends TestCase
 {
     public function testPacking()

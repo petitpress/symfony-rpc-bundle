@@ -41,7 +41,7 @@ class ObjectType extends AbstractType
     {
         $key = (string) $key;
         if($key == "") return "empty";
-        if (is_numeric($key{0})) {
+        if (is_numeric($key[0])) {
             $key = "i{$key}";
         }
 

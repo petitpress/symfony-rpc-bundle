@@ -279,6 +279,6 @@ class Server implements ServerInterface
             return;
         }
 
-        $this->logger->error($exception);
+        $this->logger->error($exception->getMessage(), ['exception' => $exception]);
     }
 }

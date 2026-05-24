@@ -6,47 +6,48 @@
 
 namespace Seven\RpcBundle\Tests\Transport;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 
+#[AllowMockObjectsWithoutExpectations]
 class TransportCurlTest extends TestCase
 {
-    /**
-     * @expectedException \Seven\RpcBundle\Rpc\Exception\CurlTransportException
-     *
-     * @dataProvider providerMakeRequestWithCurlError
-     */
+    #[DataProvider('providerMakeRequestWithCurlError')]
     public function testMakeRequestWithCurlError($errorCode, $errorMessage)
     {
+        $this->expectException(\Seven\RpcBundle\Rpc\Exception\CurlTransportException::class);
+
         $transportMock = $this->getMockBuilder("Seven\\RpcBundle\\Rpc\\Transport\\TransportCurl")
-                                ->setMethods(array("getCurlRequest"))
+                                ->onlyMethods(array("getCurlRequest"))
                                 ->getMock();
 
         $requestMock = $this->createMock("Symfony\\Component\\HttpFoundation\\Request");
 
         $curlRequestMock = $this->getMockBuilder("Seven\\RpcBundle\\Rpc\\Transport\\Curl\\CurlRequest")
-                                ->setMethods(array("execute", "getErrorNumber", "getErrorMessage"))
+                                ->onlyMethods(array("execute", "getErrorNumber", "getErrorMessage"))
                                 ->getMock();
 
         $curlRequestMock->expects($this->once())
             ->method('execute')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $curlRequestMock->expects($this->once())
             ->method('getErrorNumber')
-            ->will($this->returnValue($errorCode));
+            ->willReturn($errorCode);
 
         $curlRequestMock->expects($this->once())
             ->method('getErrorMessage')
-            ->will($this->returnValue($errorMessage));
+            ->willReturn($errorMessage);
 
         $transportMock->expects($this->once())
             ->method('getCurlRequest')
-            ->will($this->returnValue($curlRequestMock));
+            ->willReturn($curlRequestMock);
 
         $transportMock->makeRequest($requestMock);
     }
 
-    public function providerMakeRequestWithCurlError()
+    public static function providerMakeRequestWithCurlError(): array
     {
         return array(
             array(CURLE_COULDNT_CONNECT, "Failed to connect() to host or proxy."),

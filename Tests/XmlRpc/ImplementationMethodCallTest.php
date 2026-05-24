@@ -9,10 +9,12 @@
  */
 
 namespace Seven\RpcBundle\Tests\XmlRpc;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Seven\RpcBundle\Rpc\Method\MethodCall;
 use Seven\RpcBundle\XmlRpc\Implementation;
 
+#[AllowMockObjectsWithoutExpectations]
 class ImplementationMethodCallTest extends TestCase
 {
 
@@ -47,7 +49,7 @@ class ImplementationMethodCallTest extends TestCase
         $requestMock = $this->createMock("Symfony\\Component\\HttpFoundation\\Request");
         $requestMock->expects($this->once())
             ->method("getContent")
-            ->will($this->returnValue($requestXml));
+            ->willReturn($requestXml);
 
         $methodCall = $impl->createMethodCall($requestMock);
 
@@ -67,7 +69,7 @@ class ImplementationMethodCallTest extends TestCase
         $requestMock = $this->createMock("Symfony\\Component\\HttpFoundation\\Request");
         $requestMock->expects($this->once())
             ->method("getContent")
-            ->will($this->returnValue($requestXml));
+            ->willReturn($requestXml);
 
         $methodCall = $impl->createMethodCall($requestMock);
 
@@ -82,7 +84,7 @@ class ImplementationMethodCallTest extends TestCase
         $requestMock = $this->createMock("Symfony\\Component\\HttpFoundation\\Request");
         $requestMock->expects($this->once())
             ->method("getContent")
-            ->will($this->returnValue(""));
+            ->willReturn("");
 
         $impl->createMethodCall($requestMock);
     }
@@ -106,7 +108,7 @@ class ImplementationMethodCallTest extends TestCase
         $requestMock = $this->createMock("Symfony\\Component\\HttpFoundation\\Request");
         $requestMock->expects($this->once())
             ->method("getContent")
-            ->will($this->returnValue($requestXml));
+            ->willReturn($requestXml);
 
         $impl->createMethodCall($requestMock);
     }
@@ -131,7 +133,7 @@ class ImplementationMethodCallTest extends TestCase
         $requestMock = $this->createMock("Symfony\\Component\\HttpFoundation\\Request");
         $requestMock->expects($this->once())
             ->method("getContent")
-            ->will($this->returnValue($requestXml));
+            ->willReturn($requestXml);
 
         $impl->createMethodCall($requestMock);
     }
@@ -154,7 +156,7 @@ class ImplementationMethodCallTest extends TestCase
         $requestMock = $this->createMock("Symfony\\Component\\HttpFoundation\\Request");
         $requestMock->expects($this->once())
             ->method("getContent")
-            ->will($this->returnValue($requestXml));
+            ->willReturn($requestXml);
 
         $impl->createMethodCall($requestMock);
     }
